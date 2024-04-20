@@ -186,6 +186,9 @@ int main()
 
         // 1. geometry pass: render scene's geometry/color data into gbuffer
         // -----------------------------------------------------------------
+        //    使用 mrt 技术在一个pass内将模型同时绘制到名称为gBuffer的帧缓冲的多个颜色附件纹理中。
+        //    在不同的颜色附件纹理中，相应的（诸如位置、法线）向量被输出到模型顶点的颜色上
+        // -----------------------------------------------------------------
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -228,7 +231,7 @@ int main()
         }
         shaderLightingPass.setVec3("viewPos", camera.Position);
         // finally render quad
-        renderQuad();
+        renderQuad();   // 渲染显示窗口大小的矩形区域
 
         // 2.5. copy content of geometry's depth buffer to default framebuffer's depth buffer
         // ----------------------------------------------------------------------------------
