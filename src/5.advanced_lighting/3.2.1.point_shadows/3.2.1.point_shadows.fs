@@ -21,14 +21,15 @@ float ShadowCalculation(vec3 fragPos)
     // get vector between fragment position and light position
     vec3 fragToLight = fragPos - lightPos;
     // ise the fragment to light vector to sample from the depth map    
-    float closestDepth = texture(depthMap, fragToLight).r;
+    float closestDepth = texture(depthMap, fragToLight).r;  // (s, t, r)
     // it is currently in linear range between [0,1], let's re-transform it back to original depth value
     closestDepth *= far_plane;
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     // test for shadows
     float bias = 0.05; // we use a much larger bias since depth is now in [near_plane, far_plane] range
-    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;        
+    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;   
+
     // display closestDepth as debug (to visualize depth cubemap)
     // FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
         
@@ -48,7 +49,6 @@ void main()
     vec3 diffuse = diff * lightColor;
     // specular
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
-    vec3 reflectDir = reflect(-lightDir, normal);
     float spec = 0.0;
     vec3 halfwayDir = normalize(lightDir + viewDir);  
     spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
