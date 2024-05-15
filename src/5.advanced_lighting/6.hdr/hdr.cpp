@@ -29,7 +29,7 @@ bool hdrKeyPressed = false;
 float exposure = 1.0f;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f);
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -118,9 +118,9 @@ int main()
     // positions
     std::vector<glm::vec3> lightPositions;
     lightPositions.push_back(glm::vec3( 0.0f,  0.0f, 49.5f)); // back light
-    lightPositions.push_back(glm::vec3(-1.4f, -1.9f, 9.0f));
-    lightPositions.push_back(glm::vec3( 0.0f, -1.8f, 4.0f));
-    lightPositions.push_back(glm::vec3( 0.8f, -1.7f, 6.0f));
+    lightPositions.push_back(glm::vec3(-1.4f, -1.9f, 14.0f));
+    lightPositions.push_back(glm::vec3( 0.0f, -1.8f, 9.0f));
+    lightPositions.push_back(glm::vec3( 0.8f, -1.7f, 11.0f));
     // colors
     std::vector<glm::vec3> lightColors;
     lightColors.push_back(glm::vec3(200.0f, 200.0f, 200.0f));
