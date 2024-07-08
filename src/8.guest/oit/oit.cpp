@@ -163,8 +163,8 @@ int main(int argc, char* argv[])
 
 	// set up transformation matrices
 	// ------------------------------------------------------------------
-	glm::mat4 redModelMat = calculate_model_matrix(glm::vec3(0.0f, 0.0f, 1.0f));
-	glm::mat4 greenModelMat = calculate_model_matrix(glm::vec3(0.0f, 0.0f, 0.0f));
+	glm::mat4 redModelMat = calculate_model_matrix(glm::vec3(0.0f, 0.0f, 0.0f));
+	glm::mat4 greenModelMat = calculate_model_matrix(glm::vec3(0.0f, 0.0f, 1.0f));
 	glm::mat4 blueModelMat = calculate_model_matrix(glm::vec3(0.0f, 0.0f, 2.0f));
 
 	// set up intermediate variables
@@ -226,6 +226,17 @@ int main(int argc, char* argv[])
         // 因为 transparentFBO 使用的是 opaqueFBO 的深度纹理，所以在 transparent pass 中要绘制的半透明物体如果是在不透明物体背后，
         // 那么就不会被绘制，只有在不透明物体前边的半透明物体才会被绘制出来。
         // --------------------------------------------------------------------------------------------------------------
+		// void glBlendFunci(	GLuint buf,			// specifies the index of the draw buffer for which to set the blend function.
+ 		//                      GLenum sfactor,		// 源混合参数应用于片段着色器输出的颜色
+ 		//                      GLenum dfactor		// 目的混合参数应用于帧缓存中已有的颜色
+		//                  );
+		// --------------------------------------------------------------------------------------------------------------
+		// 对于 transparentFBO 索引为 1 的 revealTexture 附件纹理，其只有一个红色颜色通道，且被初始化为 1。主要存储绘制的是半透明
+		// 物体透明度信息，片段着色器中片段的透明度输出后，经过 0 x Sr + (1 - Sr) * Dr 混合操作，存储到 revealTexture 纹理中，该
+		// 混合操作会使得，如果有半透明物体绘制到纹理的某个像素上，该像素上的值就会小于 1，如果有多个半透明物体绘制覆盖了同一纹理像素，这
+		// 个纹理像素上的值每执行一次混合就会变小，越来越小。所以这个 revealTexture 可以用来区别图像上哪些区域被绘制了半透明物体，因为
+		// 是伴随 accumTexture 生成的，与之有相同的物体片段纹理坐标信息，所以可以用来识别出 accumTexture 上哪些区域是半透明物体区域
+		// --------------------------------------------------------------------------------------------------------------
 
 		// configure render states
 		glDepthMask(GL_FALSE);
@@ -254,9 +265,9 @@ int main(int argc, char* argv[])
 		glBindVertexArray(quadVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        // ---------------------------------------------------------------------------------
-		// draw composite image (composite pass)
-		// ---------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------
+		// draw composite image (composite pass，合成通道)
+		// --------------------------------------------------------------------------------------------------------------
 
 		// set render states
 		glDepthFunc(GL_ALWAYS);

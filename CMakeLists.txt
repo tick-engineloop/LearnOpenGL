@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required (VERSION 3.14)
+cmake_policy(VERSION 3.14)
 
 project (LearnOpenGL)
 
@@ -61,6 +61,7 @@ set(CHAPTERS
     5.advanced_lighting
     6.pbr
     7.in_practice
+    8.guest
 )
 
 set(1.getting_started
@@ -163,6 +164,9 @@ set(7.in_practice
     # 2.text_rendering
 )
 
+set(8.guest
+    oit
+)
 
 
 configure_file(configuration/root_directory.h.in configuration/root_directory.h)
@@ -204,7 +208,6 @@ foreach(CHAPTER ${CHAPTERS})
         # copy shader files to build directory
         file(GLOB SHADERS
                  "src/${CHAPTER}/${DEMO}/*.vs"
-                 # "src/${CHAPTER}/${DEMO}/*.frag"
                  "src/${CHAPTER}/${DEMO}/*.fs"
                  "src/${CHAPTER}/${DEMO}/*.gs"
         )
